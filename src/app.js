@@ -4,7 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
 
-import * as Sentry from "@sentry/node";
+// import * as Sentry from "@sentry/node";
 
 import { notFound, errorHandler } from "./middlewares.js";
 import api from "./routes/index.js";
@@ -33,20 +33,20 @@ app.use(urlencoded({ extended: true }));
 
 app.set("trust proxy", 1);
 
-Sentry.init({
-  environment: env.data.NODE_ENV,
-  dsn: env.data.SENTRY_DSN_URL,
-  integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
-    new Sentry.Integrations.Express({ app }),
-    ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-  ],
-  tracesSampleRate: 0,
-  sampleRate: 0.1,
-});
+// Sentry.init({
+//   environment: env.data.NODE_ENV,
+//   dsn: env.data.SENTRY_DSN_URL,
+//   integrations: [
+//     new Sentry.Integrations.Http({ tracing: true }),
+//     new Sentry.Integrations.Express({ app }),
+//     ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+//   ],
+//   tracesSampleRate: 0,
+//   sampleRate: 0.1,
+// });
 
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
+// app.use(Sentry.Handlers.requestHandler());
+// app.use(Sentry.Handlers.tracingHandler());
 
 app.get("/", (req, res) => {
   res.json({
@@ -58,7 +58,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", api);
 
-app.use(Sentry.Handlers.errorHandler());
+// app.use(Sentry.Handlers.errorHandler());
 
 app.use(notFound);
 app.use(errorHandler);

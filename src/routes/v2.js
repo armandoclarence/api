@@ -193,35 +193,15 @@ router.get("/popular", async (req, res, next) => {
 
 router.get("/schedule", async (req, res, next) => {
   try {
-    const { data } = await axios.post("https://api.anify.tv/schedule", {
-      fields: [
-        "id",
-        "idMal",
-        "title",
-        "coverImage",
-        "bannerImage",
-        "mappings",
-        "description",
-        "countryOfOrigin",
-        "year",
-        "color",
-        "format",
-        "type",
-        "genres",
-        "tags",
-        "airingAt",
-        "aringEpisode",
-        "totalEpisode",
-        "season",
-        "status",
-        "currentEpisode",
-      ],
-      type: "anime",
-    });
-
-    res.status(200).json(successRes(200, "success", { results: data }));
-  } catch (error) {
-    next(error);
+    res.set("Cache-Control", "no-cache")
+    const {data:resp} = await axios.get(`https://api.jikan.moe/v4/schedules?page=${parseInt(req.query.p) || 1}&limit=${parseInt(req.query.limit)}`)
+    const {pagination:page,data:results} = resp
+    res.status(200).json(successRes(200, "success", {
+      page: page,
+      results: results,
+    }));
+  }catch (error) {
+    next(error)
   }
 });
 
